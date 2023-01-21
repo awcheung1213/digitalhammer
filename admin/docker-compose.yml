@@ -1,0 +1,39 @@
+# latest version of Docker Compose
+# define services
+  # backend will be this admin app
+    # identify the Dockerfile in the current directory named 'Dockerfile'
+  # map local host port to container port
+  # map changes to local app to container app using volumes
+  # set dependency to run db container prior to compose
+
+  # set database image to MySQL
+  # set a restart command to make sure MySQL stops are restarted
+  # set environment variables for MySQL credentials
+  # map changes to local db to container app using volumes
+  # map local db port to container port
+
+version: '3.8'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+  
+  db:
+    image: mysql:8.0.32
+    restart: always
+    environment:
+      MYSQL_DATABASE: admin
+      MYSQL_USER: acheung
+      MYSQL_PASSWORD: acheung
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - .dbdata:/var/lib/mysql
+    ports:
+      - 33066:3306
